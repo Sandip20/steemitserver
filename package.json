@@ -4,6 +4,10 @@
   "author": "Sandip",
   
    "main": "app.js",
+   "scripts": {
+    "start": "node app.js"
+    
+  },
   "dependencies": {
     "body-parser": "^1.18.3",
     "dsteem": "^0.9.0",
