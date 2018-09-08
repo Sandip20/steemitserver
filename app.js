@@ -1,12 +1,20 @@
 // var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
+
 var logger = require('morgan');
 var app = express();
+app.set('port', (process.env.PORT || 3000));
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH, OPTIONS');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Authorization,accept");
+    next();
+});
+
+
 var mongoose = require('mongoose')
-var loginSessions=require('./server/models/model_login')
-const mongourl='mongodb://steem:steem123@ds249942.mlab.com:49942/steemitin'
+var loginSessions = require('./server/models/model_login')
+const mongourl = 'mongodb://steem:steem123@ds249942.mlab.com:49942/steemitin'
 mongoose.connect(mongourl, { useNewUrlParser: true }, function (err) {
     if (err)
         console.log(err)
@@ -40,7 +48,7 @@ app.use(function (req, res, next) {
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(__dirname+'/www'))
+app.use(express.static(__dirname + '/www'))
 // app.use(express.static(path.join(__dirname, 'www')));
 // app.use('/login', express.static(path.join(__dirname, 'wwww')));
 app.use('/api/login', require('./server/routes/login'))
@@ -63,4 +71,8 @@ app.use('/api/v1/posts', require('./server/routes/posts'))
 //     res.send(err.status);
 // });
 
-module.exports = app;
+//module.exports = app;
+app.listen(app.get('port'), function() {
+    console.log('Node app is running on port', app.get('port'));
+  });
+     
